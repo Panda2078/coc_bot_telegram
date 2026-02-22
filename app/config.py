@@ -1,4 +1,5 @@
-from pydantic import BaseSettings
+import os
+from pydantic import BaseSettings, ValidationError
 
 class Settings(BaseSettings):
     TELEGRAM_TOKEN: str
@@ -7,6 +8,12 @@ class Settings(BaseSettings):
     OPENAI_API_KEY: str
 
     class Config:
-        env_file = ".env"
+        env_file = ".env"  # Solo para desarrollo local
+        env_file_encoding = "utf-8"
 
-settings = Settings()
+try:
+    settings = Settings()
+except ValidationError as e:
+    print("❌ Error de configuración de entorno:")
+    print(e.json())
+    raise
