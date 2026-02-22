@@ -1,19 +1,15 @@
 from telegram import Update
 from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
-from app.config import settings
-from app.database import mongo
+import settings  # tu archivo de configuración con TELEGRAM_TOKEN
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    mongo.save_user(update.effective_user.id, update.effective_user.username)
-    await update.message.reply_text(f"Hola {update.effective_user.first_name}! Bot activo ✅")
+    await update.message.reply_text("Hola! El bot está activo.")
 
-async def test_coC(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text("Proxy y bot funcionan correctamente!")
-
+# Crear aplicación
 app = ApplicationBuilder().token(settings.TELEGRAM_TOKEN).build()
-app.add_handler(CommandHandler("start", start))
-app.add_handler(CommandHandler("test", test_coC))
 
-if __name__ == "__main__":
-    print("Bot iniciado...")
-    app.run_polling()
+# Agregar comandos
+app.add_handler(CommandHandler("start", start))
+
+# Ejecutar
+app.run_polling()
